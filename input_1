@@ -1,0 +1,229 @@
+#-------------------------------------------
+~Simulation Title Card
+#-------------------------------------------
+~Simulation Title Card
+Eusebius J. Kutsienyo,
+Predictive Simulation Team - Tamarack Investigation Project,
+Pacific Northwest National Lab,
+25 February 2024,
+11:00 AM PST,
+2,
+Simulation of CO2 injection into the Tamarack bowl at the proposed well. This is new grid cell built not as boundary fitted.
+Injecting 50MMT wihin 30 years into periodotide to address the investigation questions. Updated saturation funtion card and pressure gradient. Values from brook and corey 1964. volcanic sand
+
+#--------------------------------#
+~Solution Control Card
+#--------------------------------#
+Normal w/ MPI Preprocessing,
+#Normal,
+STOMP-CO2 w/porosity,
+2,
+0,s,1,day,1.e-5,s,0.2,day,1.25,16,1.e-06,
+14,day,50,year,4,day,5,day,1.15,16,1.e-06,
+#3,yr,30,yr,4,day,4,day,1.25,16,1.e-06,
+99999,
+Variable Aqueous Diffusion,
+Variable Gas Diffusion,
+0,
+
+#---------------------------------------------
+~Grid Card
+#---------------------------------------------
+Cartesian,
+#85,85,75,6,4,1,
+#85,85,75,5,4,1,
+85,85,75,4,4,1,
+491000,m,85@100,m,
+5157000,m,85@100,m,
+-2600,m,75@40,m,
+
+#--------------------------------------------
+~Rock/Soil Zonation Card
+#--------------------------------------------
+formatted zonation file,zone_all.txt,
+Country Rock,
+Peridotite Rock(MAIN),
+Gabbro Rock,
+
+#--------------------------------------------
+~Mechanical Properties Card
+#--------------------------------------------
+Gabbro Rock,2980.0,kg/m^3,0.01,0.01,Compressibility,1e-10,1/Pa,,,constant,1.0,1.0,
+Peridotite Rock(MAIN),3230.0,kg/m^3,0.15,0.15,Compressibility,1e-8,1/Pa,,,constant,1.0,1.0,
+Country Rock,2980.0,kg/m^3,0.01,0.01,Compressibility,1e-10,1/Pa,,,constant,1.0,1.0,
+
+#--------------------------------------------
+~Hydraulic Properties Card
+#--------------------------------------------
+Gabbro Rock,1e-10,mD,1e-10,mD,1e-10,mD,
+Peridotite Rock(MAIN),100,mD,100,mD,10,mD,
+Country Rock,1e-10,mD,1e-10,mD,1e-10,mD,
+
+#--------------------------------------------
+~Saturation Function Card
+#--------------------------------------------
+Gabbro Rock,Brooks and Corey w/ Webb w/ Entrapment,154.00,cm,4.0330,0.0,0.2,        # Not found
+Peridotite Rock(MAIN),Brooks and Corey w/ Webb w/ Entrapment,100,cm,2.29,0.01,0.2,  #Figure 2 brooks and corey 1964 for volcanic sand
+Country Rock,Brooks and Corey w/ Webb w/ Entrapment,25.48,cm,0.67,0.11,0.2,    # Table 3 in Oostrom et al 2016 comparison
+
+#--------------------------------------------
+~Aqueous Relative Permeability Card
+#--------------------------------------------
+Gabbro Rock,Burdine,,
+Peridotite Rock(MAIN),Burdine,,
+Country Rock,Burdine,,
+
+#--------------------------------------------
+~Gas Relative Permeability Card
+#--------------------------------------------
+Gabbro Rock,Burdine,,
+Peridotite Rock(MAIN),Burdine,,
+Country Rock,Burdine,,
+
+#-------------------------------------------- 
+~Thermal Properties Card
+#--------------------------------------------
+Gabbro Rock,Parallel,2.86,W/m K,2.86,W/m K,2.86,W/m K,700,J/kg K,
+Peridotite Rock(MAIN),Parallel,2.86,W/m K,2.86,W/m K,2.86,W/m K,700,J/kg K,
+Country Rock,Parallel,2.86,W/m K,2.86,W/m K,2.86,W/m K,700,J/kg K,
+
+#--------------------------------------------
+~Salt Transport Card
+#--------------------------------------------
+Gabbro Rock,0.0,ft,0.0,ft,
+Peridotite Rock(MAIN),0.0,ft,0.0,ft,
+Country Rock,0.0,ft,0.0,ft,
+
+#--------------------------------------------
+~Solute/Porous Media Interaction Card
+#--------------------------------------------
+Gabbro Rock,,,,,
+Peridotite Rock(MAIN),,,,,
+Country Rock,,,,,
+
+#--------------------------------------------
+~Inactive Nodes Card 
+#--------------------------------------------
+Rock/Soil Types,1,
+Country Rock,
+
+#---------------------------------------------------------
+~Initial Conditions Card
+#---------------------------------------------------------
+Gas Pressure,Aqueous Pressure,
+4,
+Gas Pressure,4152.408157813888,psi,,,,,-0.0465,1/ft,1,85,1,85,1,75,  # Aqueous Pressure [Pa] at base node = 101325 + [WT elev(m) - Elev(m) of base node]*998.32*9.81.  Adjust density (998.32) to account for higher salinity. WT = 393m and Elv of base node = -2520
+Aqueous Pressure,4152.408157813888,psi,,,,,-0.0465,1/ft,1,85,1,85,1,75,
+Temperature,77,F,,,,,,,1,85,1,85,1,75,
+Salt Mass Fraction,0.01,,,,,,,,1,85,1,85,1,75,
+
+#---------------------------------------------------------
+#~Boundary Conditions Card
+#---------------------------------------------------------
+2,
+North,Aqu. Initial Condition,Gas Zero Flux,Aqueous Mass Fraction,Aqu. Species Zero Flux,Gas Species Zero Flux,
+0,
+1,15,85,85,60,75,1,
+0,s,1179.4484415363,psi,,,,,,,
+West,Aqu. Initial Condition,Gas Zero Flux,Aqueous Mass Fraction,Aqu. Species Zero Flux,Gas Species Zero Flux,
+0,
+1,1,70,85,60,75,1,
+0,s,1179.4484415363,psi,,,,,,,
+
+~Coupled Well Card
+1,
+CO2 Injection Well,Water Relative Saturation,1.00,1.00,1.00,50,MMT,TAMK0001-CO2 well, # drill well location TAMK0001 was drilled at 496715 E, 5161661 N, RL 393m (NAD83 UTM Zone 15N). At surface the hole is 0 degree azimuth and -90 dip (a vertical hole)
+1,
+496715,m,5161661,m,-800,m,496715,m,5161661,m,-1136,m,4.5,in,0.0,screened, #TAMK0001 was drilled at 496715 E, 5161661 N, The total depth of the hole (run length) is 3727ft or 1136m.
+2,
+0.0,yr,1.667,MMT/yr,5200,psi,0.0,
+30,yr,1.667,MMT/yr,5200,psi,0.0,
+
+#-------------------------------------------------------#
+~Output Control Card
+#-------------------------------------------------------#
+3,
+58,47,41, #Tank001 btw-960m and 1000m
+58,47,38, #Tank001 btw-1080m and 1120m
+58,47,60, #Tank001  btw-200m and 240m
+1,1,yr,m,6,6,6,
+29,
+#pH,,
+Temperature,C,
+Diffusive Porosity,,
+Aqueous Density,kg/m^3,
+Aqueous Viscosity,cp,
+Trapped Gas Saturation,,
+Precipitated Salt Saturation,,
+Gas Pressure,psi,
+Aqueous Pressure,psi,
+Gas Saturation,,
+Aqueous Saturation,,
+Coupled-Well Press,1,psi,
+Coupled-Well CO2 Mass Rate,1,MMt/yr,
+coupled-well CO2 mass integral,1,MMt,
+coupled-well water mass integral,1,kg,
+Gas Density,kg/m^3,
+Gas Viscosity,cp,
+Integrated CO2 Mass,MMT,
+Integrated CO2 Aqueous Mass,MMT,
+Integrated CO2 Gas Mass,MMT,
+Integrated Trapped CO2 Gas,MMT,
+Integrated CO2 Mass Source,MMT,
+CO2 Gas Mass Fraction,,
+CO2 Aqueous Mass Fraction,,
+total water mass,kg,
+total CO2 mass,MMT,
+integrated water mass,kg,
+integrated water mass source,kg,
+water mass source rate,kg/s,
+Node Number,,
+19,
+0.0,yr,
+1.0,yr,
+2.0,yr,
+3.0,yr,
+4.0,yr,
+5.0,yr,
+6.0,yr,
+7.0,yr,
+8.0,yr,
+9.0,yr,
+10,yr,
+15,yr,
+20,yr,
+25,yr,
+30,yr,
+35,yr,
+40,yr,
+45,yr,
+50,yr,
+27,
+#pH,,
+Temperature,C,
+rock/soil type,,
+Salt Saturation,,
+Diffusive Porosity,,
+X Intrinsic Permeability,mD,
+Y Intrinsic Permeability,mD,
+Z Intrinsic Permeability,mD,
+Gas Pressure,psi,
+Aqueous Pressure,psi,
+Aqueous Hydraulic head,ft,
+Gas Density,kg/m^3,
+Aqueous Density,kg/m^3,
+Gas Viscosity,cp,
+Gas Saturation,,
+Aqueous Saturation,,
+Vertically Integrated Gas CO2 Mass per Area,MMT/ft^2,
+Vertically Integrated Gas CO2 Mass,MMT,
+Vertically Integrated CO2 Mass per Area,MMT/ft^2,
+Vertically Integrated CO2 Mass,MMT,
+Trapped Gas Saturation,,
+CO2 Gas Mass Fraction,,
+CO2 Aqueous Mass Fraction,,
+total water mass,kg,
+total CO2 mass,MMT,
+Node Number,,
+znc gas vol flux,m/yr,
+znc aqueous vol,m/yr,
